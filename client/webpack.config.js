@@ -8,22 +8,34 @@ const { InjectManifest } = require('workbox-webpack-plugin');
 
 module.exports = () => {
   return {
-    mode: 'development',
-    entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js'
-    },
+    entry: './src/js/index.js',
     output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, './dist'),
+      filename: 'index_bundle.js',
     },
-    plugins: [
-      
-    ],
-
+    plugins: [new HtmlWebpackPlugin()],
     module: {
       rules: [
-        
+        {
+          test: /\.css$/i,
+          use: ['HtmlWebpackPlugin.loader', 'css-loader'],
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource',
+        },
+        {
+          test: /\.m?js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
+
+            }
+          }
+        }
       ],
     },
   };

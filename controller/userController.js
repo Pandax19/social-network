@@ -1,11 +1,11 @@
-const { user } = require('../models');
+const  User  = require('../models');
 
 module.exports = {
     // get all users
     async getAllUsers(req, res) {
-        const user = await user.find({})
+        const users = await User.find({})
         .populate({
-            path: 'thoughts',
+            path: 'user',
             select: '-__v'
         })
         .select('-__v')
@@ -21,7 +21,7 @@ module.exports = {
     async getUserById({ params }, res) {
         const user = await user.findOne({ _id: params.id })
         .populate({
-            path: 'thoughts',
+            path: 'user',
             select: '-__v'
         })
         .select('-__v')
@@ -106,6 +106,5 @@ module.exports = {
         .catch(err => res.json(err));
     }
 };
-
 
 

@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const express = require('express');
+
 const {
     getAllThoughts,
     getThoughtById,
@@ -10,7 +12,7 @@ const {
 } = require('../../controller/thoughtsController');
 
 // /api/thoughts
-router
+router 
     .route('/')
     .get(getAllThoughts)
     .post(createThought);

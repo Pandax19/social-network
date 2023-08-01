@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const connection = require('../config/connection');
  
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/social-network-api', {
     useNewUrlParser: true,
@@ -7,4 +8,4 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/social-network-
     useFindAndModify: false
 });
 
-module.exports = mongoose.connection;
+module.exports = connection;

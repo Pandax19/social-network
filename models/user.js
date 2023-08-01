@@ -2,7 +2,9 @@ const { Schema, model } = require('mongoose');
 const moment = require('moment');
 
 // create the User model using the UserSchema
-const User = model('User', userSchema);
+
+
+
 
 const userSchema = new Schema(
     {
@@ -46,7 +48,7 @@ userSchema.virtual('friendCount').get(function() {
     return this.friends.length;
 }
 );
-
+const User = model('User', userSchema);
 
 // export the User model
 module.exports = User;

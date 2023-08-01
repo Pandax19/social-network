@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const moment = require('moment');
+const Reaction = require('./reaction');
 
 const thoughtsSchema = new Schema(
     {
@@ -24,8 +25,8 @@ const thoughtsSchema = new Schema(
             type: String,
             required: true
         },
-        // use reaction Schema to validate data for a reply
-        reactions: [reactionSchema]
+       
+        reactions: [Reaction.schema]
 
     }, 
     {

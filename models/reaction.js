@@ -1,14 +1,13 @@
 const { Schema, model } = require('mongoose');
 const moment = require('moment');
 
-const thoughtsSchema = new Schema(
+const reactionSchema = new Schema(
     {
-        // set custom id to avoid confusion with parent thought _id
-        thoughtName: {
+        reactionName: {
             type: String,
             required: true,
         },
-        thoughtText: {
+        reactionText: {
             type: String,
             required: true,
             minlength: 1,
@@ -24,19 +23,17 @@ const thoughtsSchema = new Schema(
             type: String,
             required: true
         },
-        // use reaction Schema to validate data for a reply
-        reactions: [reactionSchema]
 
-    }, 
+    },
     {
         toJSON: {
-            virtuals: true,
             getters: true
         },
         id: false
     }
-    
-    ); 
-    const Thought = model('Thought', thoughtsSchema);
+);
 
-    module.exports = Thought;
+const Reaction = model('Reaction', reactionSchema);
+
+module.exports = Reaction;
+

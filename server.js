@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const db = require('./config/connection');
 const routes = require('./routes');
 const app = express();
+
 const PORT = process.env.PORT || 3001;
+
+
 // const { ApolloServer } = require('apollo-server-express');
 // const { typeDefs, resolvers } = require('./schemas');
 // const { authMiddleware } = require('./utils/auth');

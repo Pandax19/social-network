@@ -1,39 +1,23 @@
-const { thoughts, users } = require('../models');
+const { Thoughts, User } = require('../models');
 
- const thoughtsController = { } || require('../models');
+// const thoughtsController = { } || require('../models');
     
 module.exports = {
     // get all thoughts
-    async getAllThoughts(req, res) {
+        async getAllThoughts(req, res) {
         try {
-            thoughts.find({})
-        .populate({
-            path: 'replies',
-            select: '-__v'
-        })
-        .select('-__v')
-        .sort({ _id: -1 })
-        .then(dbThoughtsData => res.json(dbThoughtsData))
-        .catch(err => {
-            console.log(err);
-            res.sendStatus(400);
-        },
-        )
+            const dbThoughtsData = await Thoughts.find({})
+        res.json(dbThoughtsData);
     } catch (err) {
-        console.log(err);
-        res.sendStatus(400);
+        console.error(err);
+        res.status(400);
     }
     },
-
+    
 
     // get one thought by id
-    getThoughtById({ params }, res) {
-        thoughts.findOne({ _id: params.id })
-        .populate({
-            path: 'replies',
-            select: '-__v'
-        })
-        .select('-__v')
+    async getThoughtById({ params }, res) {
+        Thoughts.findOne({ _id: params.id })
         .then(dbThoughtsData => {
 
             if (!dbThoughtsData) {
@@ -44,22 +28,24 @@ module.exports = {
         }
         )
         .catch(err => {
-            console.log(err);
+            console.error(err);
             res.sendStatus(400);
         }
         );
     },  
     // createThought
-    createThought({ body }, res) {
+    async createThought({ body }, res) {
        
-        thoughts.create(body)
+        Thoughts.create(body)
         .then(dbThoughtsData => res.json(dbThoughtsData))
-        .catch(err => res.json(err));
-
+        .catch((err) => {
+            console.log(err);
+            return res.status(400).json(err);
+          });
     },
         // update thought by id
-        updateThought({ params, body }, res) {
-            thoughts.findOneAndUpdate({_id: params.id }, body, { new: true, runValidators: true })
+      async updateThought({ params, body }, res) {
+            Thoughts.findOneAndUpdate({_id: req.params.id }, body, { new: true, runValidators: true })
             .then(dbThoughtsData => {
                 if (!dbThoughtsData) {
                     res.status(404).json({ message: 'No thought found with this id!' });
@@ -72,12 +58,13 @@ module.exports = {
 
 
     // delete thought
-    deleteThought({ params }, res) {
-        thoughts.findOneAndDelete({ _id: params.id })
+    async deleteThought({ params }, res) {
+        Thoughts.findOneAndDelete({ _id: req.params.id })
         .then(dbThoughtsData => {
 
             if (!dbThoughtsData) {
-                res.status(404).json({ message: 'No thought found with this id!' });
+                res.status(404).json({ message: 'No thought found with this id!' 
+            });
                 return;
             }
             res.json(dbThoughtsData);
@@ -88,8 +75,8 @@ module.exports = {
     
 
     // add reaction
-    addReaction({ params, body }, res) {
-        thoughts.findOneAndUpdate(
+    async addReaction({ params, body }, res) {
+        Thoughts.findOneAndUpdate(
             { _id: params.thoughtId },
             { $push: { replies: body } },
             { new: true, runValidators: true }
@@ -105,8 +92,8 @@ module.exports = {
         .catch(err => res.json(err));
     },
     // remove reaction
-    removeReaction({ params }, res) {
-        thoughts.findOneAndUpdate(
+    async removeReaction({ params }, res) {
+        Thoughts.findOneAndUpdate(
             { _id: params.thoughtId },
             { $pull: { replies: { replyId: params.replyId } } },
             { new: true }
@@ -117,31 +104,4 @@ module.exports = {
 };
 
 
-module.exports = thoughtsController;
-
-// Path: routes\api\thoughts-routes.js
-// const router = require('express').Router();
-// const {
-//     getAllThoughts,
-//     getThoughtById,
-//     createThought,
-//     updateThought,
-//     deleteThought,
-//     addReaction,
-//     removeReaction
-// } = require('../../controllers/thoughts-controller');
-//
-// // /api/thoughts
-// router
-//     .route('/')
-//     .get(getAllThoughts)
-//     .post(createThought);
-//
-// // /api/thoughts/:id
-// router
-//     .route('/:id')
-//     .get(getThoughtById)
-//     .put(updateThought)
-//     .delete(deleteThought);
-//
-
+// module.exports = thoughtsController;

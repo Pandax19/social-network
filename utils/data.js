@@ -92,35 +92,6 @@
   'Firefox is great for privacy',
 ];
 
-const lorem = [
-    'lorem',
-  'imsum',
-  'dolor',
-  'sit',
-  'amet',
-  'consectetur',
-  'adipiscing',
-  'elit',
-  'curabitur',
-  'vel',
-  'hendrerit',
-  'libero',
-  'eleifend',
-  'blandit',
-  'nunc',
-  'ornare',
-  'odio',
-  'ut',
-  'orci',
-  'gravida',
-  'imperdiet',
-  'nullam',
-  'purus',
-  'lacinia',
-  'a',
-  'pretium',
-  'quis',
-];
 
 const getRandomThought = () => {
     const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
@@ -128,14 +99,11 @@ const getRandomThought = () => {
     }
 
 const getRandomUser = () => {
-    const users = users[Math.floor(Math.random() * users.length)];
-    return users;
+    const user = users[Math.floor(Math.random() * users.length)];
+    return user;
     }
 
-const getRandomLorem = () => {
-    const lorem = lorem[Math.floor(Math.random() * lorem.length)];
-    return lorem;
-    }
 
-module.exports = { getRandomThought, getRandomUser, getRandomLorem };
+
+module.exports = { getRandomThought, getRandomUser };
 

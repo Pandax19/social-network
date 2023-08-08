@@ -1,18 +1,21 @@
 const connection = require('../config/connection');
-const { User, Thought } = require('../models');
-const { db } = require('../models/user');
-const {
-    getRandomThought,
-    getRandomUser
-} = require('../utils/random');
+const { user, Thought } = require('../models');
+const { getRandomThought, getRandomUser } = require('./data');
 
 console.time('seed');
-
+connection.on('error', (err) => err);
 
 connection.once('open', async () => {
-    await Thought.deleteMany({});
-    await User.deleteMany({});
-    console.log('Collections deleted');
+    let userCount = await connection.db.listCollections({name: 'users'}).toArray();
+    let thoughtCount = await connection.db.listCollections({name: 'thoughts'}).toArray();
+    if (userCount > 0 ) {   
+        await user.deleteMany({});
+    }
+    if (thoughtCount > 0 ) {   
+        await Thought.deleteMany({});
+    }
+    console.log('Collections dropped');
+
 
     const userData = [];
     const thoughtData = [];
@@ -21,8 +24,18 @@ connection.once('open', async () => {
         const user = getRandomUser();
         userData.push(user);
     }
-    const createdUsers = await User.collection.insertMany(userData);
+    const createdUsers = await user.insertMany(userData);
     console.log(`${createdUsers.result.n} users created`);
+
+    user.push({
+        username: 'testUser',
+        email: ''
+    });
+
+    Thought.push({
+        thoughtText: 'test thought',
+        username: 'testUser'
+    });
 
     for (let i = 0; i < 100; i++) {
         const thought = getRandomThought();
@@ -33,7 +46,7 @@ connection.once('open', async () => {
 
     for (let i = 0; i < 100; i++) {
         const randomThought = await Thought.findOne().skip(Math.floor(Math.random() * 100));
-        const randomUser = await User.findOne().skip(Math.floor(Math.random() * 50));
+        const randomUser = await user.findOne().skip(Math.floor(Math.random() * 50));
 
         randomUser.thoughts.push(randomThought);
         await randomUser.save();
@@ -42,7 +55,7 @@ connection.once('open', async () => {
     console.log('Thoughts added to users');
 
     for (let i = 0; i < 100; i++) {
-        const randomUser = await User.findOne().skip(Math.floor(Math.random() * 50));
+        const randomUser = await user.findOne().skip(Math.floor(Math.random() * 50));
         const randomThought = await Thought.findOne().skip(Math.floor(Math.random() * 100));
 
         randomThought.reactions.push({
@@ -52,7 +65,6 @@ connection.once('open', async () => {
 
         await randomThought.save();
     }
-
     console.log('Reactions added to thoughts');
 
     console.timeEnd('seed');

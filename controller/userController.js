@@ -1,22 +1,35 @@
-const  User  = require('../models');
+const  { User, Thoughts }  = require('../models');
+const { ObjectId } = require('mongoose').Types;
+
+
+const headCount = async () => {
+    const numberOfUsers = await User.aggregate()
+      .count('userCount');
+    return numberOfUsers;
+  }
+  
+
+
+
+
 
 module.exports = {
     // get all users
     async getAllUsers(req, res) {
-        const users = await User.find({})
-        .populate({
-            path: 'user',
-            select: '-__v'
-        })
-        .select('-__v')
-        .sort({ _id: -1 })
-        .then(dbuserData => res.json(dbuserData))
-        .catch(err => {
+        try {
+            const users = await User.find();
+      
+            const userObj = {
+              users, 
+              headCount: await headCount(),
+            };
+      
+            res.json(userObj);
+          } catch (err) {
             console.log(err);
-            res.sendStatus(400);
-        }
-        );
-    },
+            return res.status(500).json(err);
+          }
+        },
     // get one user by id
     async getUserById({ params }, res) {
         const user = await user.findOne({ _id: params.id })

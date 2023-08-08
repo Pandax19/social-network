@@ -1,16 +1,13 @@
 {
-  "name": "JATE",
+  "name": "social-network-api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:dev": "",
-    "start": "",
-    "server": "",
-    "build": "",
-    "install": "",
-    "client": "",
-    "seed": "node utils/seed"
+    "start": "node index",
+    "dev": "nodemon index",
+    "seed": "node utils/seed",
+    "heroku-postbuild": "node utils/seed.js"
   },
   "keywords": [],
   "author": "",

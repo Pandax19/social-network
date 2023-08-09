@@ -1,6 +1,4 @@
 const { Schema, model } = require('mongoose');
-const moment = require('moment');
-const Reaction = require('./reaction');
 
 const thoughtsSchema = new Schema(
     {
@@ -17,22 +15,23 @@ const thoughtsSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now,
-            // use moment to format date on get
-            get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
+            default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),            
         },
-        username: {
-            type: String,
+        users: [{
+            type: Schema.Types.ObjectId,
             required: true
-        },
+        }],
        
-        reactions: [Reaction.schema]
+        reactions: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Reaction',
+              },]
 
     }, 
     {
         toJSON: {
             virtuals: true,
-            getters: true
         },
         id: false
     }
@@ -40,4 +39,4 @@ const thoughtsSchema = new Schema(
     ); 
     const Thought = model('Thought', thoughtsSchema);
 
-    module.exports = Thought;
+    module.exports =  Thought ;

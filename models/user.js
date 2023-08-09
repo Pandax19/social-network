@@ -1,11 +1,5 @@
 const { Schema, model } = require('mongoose');
-const moment = require('moment');
-
 // create the User model using the UserSchema
-
-
-
-
 const userSchema = new Schema(
     {
         // set custom id to avoid confusion with parent thought _id
@@ -23,13 +17,13 @@ const userSchema = new Schema(
         },
         thoughts: [
           {
-            type: Schema.Types.ObjectId,
+            type: String,
             ref: 'Thought'
           }
         ],
         friends: [
           {
-             type: Schema.Types.ObjectId,
+             type: String,
             ref: 'User'
           }   
         ]
@@ -39,7 +33,7 @@ const userSchema = new Schema(
             virtuals: true,
             getters: true
         },
-        id: false
+        
     }   
 );
 
@@ -48,6 +42,7 @@ userSchema.virtual('friendCount').get(function() {
     return this.friends.length;
 }
 );
+
 const User = model('User', userSchema);
 
 // export the User model

@@ -1,6 +1,5 @@
-const  { User, Thoughts }  = require('../models');
-const { ObjectId } = require('mongoose').Types;
-
+const  { User }  = require('../models');
+ 
 
 const headCount = async () => {
     const numberOfUsers = await User.aggregate()
@@ -8,10 +7,6 @@ const headCount = async () => {
     return numberOfUsers;
   }
   
-
-
-
-
 
 module.exports = {
     // get all users
@@ -31,8 +26,8 @@ module.exports = {
           }
         },
     // get one user by id
-    async getUserById({ params }, res) {
-        const user = await user.findOne({ _id: params.id })
+    async getUserById(req , res) {
+        const user = await user.findOne({ _id: req.params.id })
         .populate({
             path: 'user',
             select: '-__v'

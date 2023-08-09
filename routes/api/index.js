@@ -1,14 +1,10 @@
-const express = require('express');
+const router = require('express').Router();
 const thoughtRoutes = require('./thoughtRoutes');
 const userRoutes = require('./userRoutes');
 
-const router = express.Router();
-
-
-
-// router.use('/api', apiRoutes);
 router.use('/thoughts', thoughtRoutes);
 router.use('/users', userRoutes);
+
 
 
 // router.use((req, res,  ) => {

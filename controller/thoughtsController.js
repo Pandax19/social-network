@@ -36,7 +36,7 @@ module.exports = {
     // createThought
     async createThought(req, res) {
        
-        Thought.create(body)
+        Thought.create(req)
         .then(think => res.json(think))
         .catch((err) => {
             console.log(err);

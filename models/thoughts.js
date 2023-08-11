@@ -2,7 +2,6 @@ const { Schema, model } = require('mongoose');
 
 const thoughtsSchema = new Schema(
     {
-        // set custom id to avoid confusion with parent thought _id
         thoughtName: {
             type: String,
             required: true,
@@ -15,28 +14,29 @@ const thoughtsSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),            
+            default: Date.now
         },
-        users: [{
-            type: Schema.Types.ObjectId,
-            required: true
-        }],
-       
+        users: [
+            {
+                type: String,
+                required: true
+            }
+        ],
         reactions: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Reaction',
-              },]
-
-    }, 
+                reactionBody: String,
+                username: String
+            }
+        ]
+    },
     {
         toJSON: {
             virtuals: true,
         },
         id: false
     }
-    
-    ); 
-    const Thought = model('Thought', thoughtsSchema);
+);
 
-    module.exports =  Thought ;
+const Thought = model('Thought', thoughtsSchema);
+
+module.exports = Thought;

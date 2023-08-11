@@ -26,42 +26,44 @@ module.exports = {
           }
         },
     // get one user by id
-    async getUserById(req , res) {
-        const user = await user.findOne({ _id: req.params.id })
-        .populate({
-            path: 'user',
-            select: '-__v'
-        })
-        .select('-__v')
-        .then(dbuserData => {
-            if (!dbuserData) {
-                res.status(404).json({ message: 'No user found with this id!' });
-                return;
-            }
-            res.json(dbuserData);
+   // get one user by id
+async getUserById(req, res) {
+    try {
+        const user = await User.findOne({ _id: req.params.id })
+            .populate({
+                path: 'user',
+                select: '-__v'
+            })
+            .select('-__v');
+
+        if (!user) {
+            return res.status(404).json({ message: 'No user found with this id!' });
         }
-        )
-        .catch(err => {
-            console.log(err);
-            res.sendStatus(400);
-        }
-        );
-    },
+
+        res.json(user);
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(400);
+    }
+},
     // createUser
     async createUser({ body }, res) {
-        const user = await user.create(body)
-        .then(dbuserData => res.json(dbuserData))
-        .catch(err => res.json(err));
+        try {
+            const newUser = await User.create(body);
+            res.json(newUser);
+        } catch (err) {
+            res.json(err);
+        }
     },
     // update user by id
     async updateUser({ params, body }, res) {
-        const user = await user.findOneAndUpdate({_id: params.id }, body, { new: true, runValidators: true })
-        .then(dbuserData => {
-            if (!dbuserData) {
+        const updatedUser = await user.findOneAndUpdate({_id: params.id }, body, { new: true, runValidators: true })
+        .then(updatedUser => {
+            if (!updatedUser) {
                 res.status(404).json({ message: 'No user found with this id!' });
                 return;
             }
-            res.json(dbuserData);
+            res.json(updatedUser);
         }
         )
         .catch(err => res.json(err));

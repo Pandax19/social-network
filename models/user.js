@@ -1,31 +1,28 @@
 const { Schema, model } = require('mongoose');
-// create the User model using the UserSchema
+
 const userSchema = new Schema(
     {
-        // set custom id to avoid confusion with parent thought _id
         username: {
             type: String,
             required: true,
-            unique: true,
             trim: true
         },
         email: {
             type: String,
             required: true,
-            unique: true,
             match: [/.+@.+\..+/]
         },
         thoughts: [
-          {
-            type: String,
-            ref: 'Thought'
-          }
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Thought'
+            }
         ],
         friends: [
-          {
-             type: String,
-            ref: 'User'
-          }   
+            {
+                type: String,
+                ref: 'User'
+            }
         ]
     },
     {
@@ -33,18 +30,15 @@ const userSchema = new Schema(
             virtuals: true,
             getters: true
         },
-        
-    }   
+        id: false,
+        strictPopulate: false
+    }
 );
 
-// get total count of friends on retrieval
-userSchema.virtual('friendCount').get(function() {
+userSchema.virtual('friendCount').get(function () {
     return this.friends.length;
-}
-);
+});
 
 const User = model('User', userSchema);
 
-// export the User model
-module.exports = User;
-
+module.exports = User;

@@ -36,7 +36,7 @@ module.exports = {
     // createThought
     async createThought(req, res) {
        
-        Thought.create(req)
+        Thought.create(req.body)
         .then(think => res.json(think))
         .catch((err) => {
             console.log(err);
@@ -59,7 +59,10 @@ module.exports = {
 
     // delete thought
     async deleteThought(req, res) {
-        Thought.findOneAndDelete({ _id: req.params.id })
+        Thought.findOneAndDelete({ _id: req.params.id }, 
+            { new: true }
+            )
+        
         .then(think => {
 
             if (!think) {

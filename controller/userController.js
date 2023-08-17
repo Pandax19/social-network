@@ -82,10 +82,10 @@ async getUserById(req, res) {
         .catch(err => res.status(400).json(err));
     },
     // add friend
-    async addFriend({ params }, res) {
+    async addFriend(req, res) {
         const user= await user.findOneAndUpdate(
             { _id: params.userId },
-            { $push: { friends: params.friendId } },
+            { $push: { friends: req.body._id } },
             { new: true }
         )
         .then(dbuserData => {
